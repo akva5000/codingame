@@ -36,14 +36,17 @@ public class Solution1 {
 
 		int L = in.nextInt();
 		int H = in.nextInt();
+		in.nextLine();
 
 		final String[] ABC = new String[20];
 		for (int n = 0; n < 20; n++) ABC[n] = "";
 
 		readAbc(in, H, ABC, L);
 
-		int value1 = readNumber(in, ABC, L);
-		int value2 = readNumber(in, ABC, L);
+		long value1 = readNumber(in, ABC, L, H);
+		long value2 = readNumber(in, ABC, L, H);
+		
+		System.err.println("Numbers: " + value1 + ", " + value2);
 
 		switch (in.next().charAt(0)) {
 			case '+':
@@ -64,55 +67,44 @@ public class Solution1 {
 		}
 
 		String[] result = convToMay(ABC, value1);
-		int pos = 0;
-		for (int line = 0; line < H; line++) {
-			for (int i = 0; i < result.length; i++) {
-				System.out.print(result[i].substring(pos, pos + L));
+		for (int i = 0; i < result.length; i++) {
+			int pos = 0;
+			for (int line = 0; line < H; line++) {
+				System.out.println(result[i].substring(pos, pos + L));
+				pos += L;
 			}
-			pos += L;
-			System.out.println();
 		}
 
 	}
 
-	private static int readAbc(Scanner in, int H, final String[] ABC, int charLen) {
+	private static void readAbc(Scanner in, int H, final String[] ABC, int L) {
 		for (int i = 0; i < H; i++) {
-			String numeral = in.next();
+			String numeral = in.nextLine();
 			int pos = 0;
 			for (int n = 0; n < 20; n++) {
-				ABC[n] += numeral.substring(pos, pos + charLen);
-				pos += charLen;
+				ABC[n] += numeral.substring(pos, pos + L);
+				pos += L;
 			}
 		}
-		return charLen;
 	}
 
-	private static int readNumber(Scanner in, final String[] ABC, int charLen) {
+	private static long readNumber(Scanner in, final String[] ABC, int L, int H) {
 		int linesNumber = in.nextInt();
-		String line = in.next();
-		int digCount = line.length() / charLen;
+		in.nextLine();
 
+		int digCount = linesNumber / H;
 		String[] digits = new String[digCount];
-		for (int i = 0; i < digCount; i++) digits[i] = "";
 
-		int pos = 0;
-		for (int n = digCount - 1; n >= 0; n--) {
-			digits[n] += line.substring(pos, pos + charLen);
-			pos += charLen;
-		}
-
-		for (int i = 1; i < linesNumber; i++) {
-			line = in.next();
-			pos = 0;
-			for (int n = digCount - 1; n >= 0; n--) {
-				digits[n] += line.substring(pos, pos + charLen);
-				pos += charLen;
+		for (int digIdx = 0; digIdx < digCount; digIdx++) {
+			digits[digIdx] = "";
+			for (int n = 0; n < L; n++) {
+				digits[digIdx] += in.nextLine();
 			}
 		}
-		
+
 		char[] mayaDigits = convStrToMaya(ABC, digits);
 		System.err.println("NUMBER: " + String.valueOf(mayaDigits));
-		return Integer.parseInt(String.valueOf(mayaDigits), 20);
+		return Long.parseLong(String.valueOf(mayaDigits), 20);
 	}
 
 	private static char[] convStrToMaya(final String[] ABC, String[] digits) {
@@ -126,20 +118,20 @@ public class Solution1 {
 				}
 			}
 		}
-		
+
 		return mDigits;
 	}
 
-	private static String[] convToMay(final String[] ABC, int value) {
+	private static String[] convToMay(final String[] ABC, long value) {
 		List<Integer> decNumber = convMayToDec(value);
 		final String[] digits = new String[decNumber.size()];
 		for (int i = 0; i < digits.length; i++) digits[i] = ABC[decNumber.get(i)];
 		return digits;
 	}
 
-	static List<Integer> convMayToDec(int value) {
+	static List<Integer> convMayToDec(long value) {
 		List<Integer> list = new ArrayList<>();
-		String t = Integer.toUnsignedString(value, 20);
+		String t = Long.toUnsignedString(value, 20);
 		for (int i = 0; i < t.length(); i++) {
 			char ch = t.charAt(i);
 			if (ch >= '0' && ch <= '9') list.add((int) (ch - '0'));
