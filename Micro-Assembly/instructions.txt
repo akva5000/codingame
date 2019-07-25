@@ -1,0 +1,85 @@
+
+MOV regDst regSrc
+MOV regDst number
+
+ADD regDst regSrc1 regSrc2
+ADD regDst regSrc number
+ADD regDst number1 number2
+
+SUB regDst regSrc1 regSrc2
+SUB regDst regSrc number 
+SUB regDst number regSrc
+SUB regDst number1 number2
+
+JNE number regSrc1 regSrc2
+JNE number regSrc number
+
+===================================
+12
+
+[cc vv rr dd] [operand1] [operand2]
+cc : command
+- 00 - MOV
+- 01 - ADD
+- 10 - SUB
+- 11 - JNE
+
+vv : operands variant
+- 00 - reg reg
+- 01 - reg number
+- 10 - number reg
+- 11 - number1 number2
+
+dd : destination register
+     if cc = 00, 01, 10 then : dd is destination register
+     if cc == 11 then : dd is src register
+
+rr : first operand register
+     if cc != 11 and vv != 11 then rr is operand register
+     if cc == 11 then rr = the first operand register
+
+operand1 : 
+     if vv != 00 then the first number
+	  
+operand2 : 
+     if cc != 11 and vv == 11 then the second number
+     if cc == 11 and vv == 01 then the number2
+
+===============================================================
+
+MOV regDst regSrc
+[00 00 regSrc regDst]
+
+MOV regDst number
+[00 01 00 regDst] [number]
+
+ADD regDst regSrc1 regSrc2
+[01 00 regSrc1 regDst] [regSrc2]
+
+ADD regDst regSrc number
+[01 01 regSrc regDst] [number]
+
+ADD regDst number regSrc
+[01 10 regSrc regDst] [number]
+
+ADD regDst number1 number2
+[01 11 00 regDst] [number1] [number2]
+
+SUB regDst regSrc1 regSrc2
+[10 00 regSrc1 regDst] [regSrc2]
+
+SUB regDst regSrc number 
+[10 01 regSrc regDst] [number]
+
+SUB regDst number regSrc
+[10 10 regSrc regDst] [number]
+
+SUB regDst number1 number2
+[10 11 00 regDst] [number1] [number2]
+
+JNE number regSrc1 regSrc2
+[11 00 regSrc1 regSrc2] [number]
+
+JNE number1 regSrc number2
+[11 11 00 regSrc] [number2] [number1]
+
