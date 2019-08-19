@@ -36,7 +36,12 @@ public class Solution1Test {
 	
 	@Test
 	public void testMain1() throws Exception {
-		String GAME = "57\n";
+		String GAME = "5\n"
+				+ "i1 i2 i3 o1 o2 o3\n"
+				+ "i3 i2 i1 o1 o2 o3\n"
+				+ "i2 i1 i3 i1 o3 o2\n"
+				+ "i1 i1 i1 o1 o1 o1\n"
+				+ "i1 o2\n";
 		ByteArrayInputStream bufIn = new ByteArrayInputStream(GAME.getBytes());
 		System.setIn(bufIn);
 
@@ -45,7 +50,11 @@ public class Solution1Test {
 
 		service.main(new String[0]);
 		sysOut.println(bufOut.toString());
-		assertEquals("ANSWER\n", bufOut.toString());
+		assertEquals("queue\n"
+				+ "stack\n"
+				+ "priority queue\n"
+				+ "unsure\n"
+				+ "mystery\n", bufOut.toString());
 	}
 	
 }
